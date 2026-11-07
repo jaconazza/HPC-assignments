@@ -403,7 +403,7 @@ int main(int argc, char **argv) {
   polybench_prevent_dce(print_array(n, POLYBENCH_ARRAY(A)));
 
   int8_t checkEqual = verifyResult(n, POLYBENCH_ARRAY(A), POLYBENCH_ARRAY(B));
-  fprintf(stderr, "");
+  fprintf(stderr, "Check Result equality: %d", checkEqual);
   /* Be clean. */
   POLYBENCH_FREE_ARRAY(A);
   POLYBENCH_FREE_ARRAY(B);
