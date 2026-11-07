@@ -1,8 +1,9 @@
 INCPATHS = -I$(UTIL_DIR)
 
 BENCHMARK = $(shell basename `pwd`)
+EXERCISE ?= $(BENCHMARK).c
 EXE = $(BENCHMARK)_acc
-SRC = $(BENCHMARK).c
+SRC = $(EXERCISE)
 HEADERS = $(BENCHMARK).h
 
 SRC += $(UTIL_DIR)/polybench.c
