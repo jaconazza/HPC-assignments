@@ -413,6 +413,7 @@ int main(int argc, char **argv) {
   kernel_lu(n, POLYBENCH_ARRAY(A));
 
   /* Start timer. */
+  fprintf(stderr, "start measuring time...\n");
   polybench_start_instruments;
 
   /* Run kernel. */
@@ -423,6 +424,7 @@ int main(int argc, char **argv) {
   /* Stop and print timer. */
   polybench_stop_instruments;
   polybench_print_instruments;
+  fprintf(stderr, "stoped measuring time\n");
 
   /* Prevent dead-code elimination. All live-out data must be printed
      by the function call in argument. */
