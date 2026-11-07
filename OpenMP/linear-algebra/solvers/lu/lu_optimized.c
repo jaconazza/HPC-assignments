@@ -62,7 +62,7 @@ static int8_t verifyResult(int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
         maxErr = e;
     }
   fprintf(stderr, "Max error: %g\n", maxErr);
-  return maxErr < 1e-9 ? 1 : -1; // se DATA_TYPE è float, usa 1e-3
+  return maxErr < 1e-9 ? 1 : -1;
 }
 
 // ---- LU Decomposition ----
@@ -329,6 +329,12 @@ matrixTriangularLowerSubsitution(DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
  * [A11' A12']
  * [A21' A22']
  */
+
+// NOTA: visto che lavoro a blocchi e un elemento viene toccato solo quando
+// tocco il suo blocco, prendo come riferimento dei depends il primo elemento
+// del blocco.
+
+// clang-format off
 static void kernelBlockLU(const int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
                           const int blockSize) {
   // iterate on every pivot block
@@ -337,32 +343,44 @@ static void kernelBlockLU(const int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
     // compute the LU decomposition on the main base/pivot block
     // manage the dimension if  blockSize > remaingin col/rows
     int kDim = MIN(_PB_N - k, blockSize);
+
+    #pragma omp task shared(A) firstprivate(k, kDim) depend(inout : A[k][k])
     sequentialLU(A, k, k + kDim - 1);
 
     // compute the TFS on each of the right blocks
     for (size_t i = k + blockSize; i < _PB_N; i += blockSize) {
-      int iDim = MIN(_PB_N - i, blockSize);
-      matrixTriangularUpperSubsitutio(A, i, iDim, k, kDim);
+      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[i][k])
+      {
+        int iDim = MIN(_PB_N - i, blockSize);
+        matrixTriangularUpperSubsitutio(A, i, iDim, k, kDim);
+      }
     }
 
     // comppute the TFS on each of the below blocks
     for (size_t i = k + blockSize; i < _PB_N; i += blockSize) {
-      int iDim = MIN(_PB_N - i, blockSize);
-      matrixTriangularLowerSubsitution(A, i, iDim, k, kDim);
+      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[k][i])
+      {
+        int iDim = MIN(_PB_N - i, blockSize);
+        matrixTriangularLowerSubsitution(A, i, iDim, k, kDim);
+      }
     }
 
     // Schur complement calculations on the rest blocks of the
     // (n-blockSize)x(n-blockSize) submatrix
     for (size_t i = k + blockSize; i < _PB_N; i += blockSize) {
       int iDim = MIN(_PB_N - i, blockSize);
+
       for (size_t j = k + blockSize; j < _PB_N; j += blockSize) {
         int jDim = MIN(_PB_N - j, blockSize);
+        
         // calculate Bij using Schur Complement
+        #pragma omp task shared(A) firstprivate(i, j, iDim, jDim) depend(in: A[k][j], A[i][k]) depend(inout: A[i][j])
         calculateSchurComplement(A, k, kDim, i, iDim, j, jDim);
       }
     }
   }
 }
+// clang-format on
 
 // -----------------------
 
@@ -392,11 +410,14 @@ int main(int argc, char **argv) {
   init_array(n, POLYBENCH_ARRAY(A));
   init_array(n, POLYBENCH_ARRAY(B));
 
+  kernel_lu(n, POLYBENCH_ARRAY(A));
+
   /* Start timer. */
   polybench_start_instruments;
 
   /* Run kernel. */
-  kernel_lu(n, POLYBENCH_ARRAY(A));
+#pragma omp parallel num_threads(NTHREADS)
+#pragma omp single
   kernelBlockLU(n, POLYBENCH_ARRAY(B), BLOCK);
 
   /* Stop and print timer. */
