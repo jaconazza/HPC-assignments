@@ -72,7 +72,8 @@ static int8_t verifyResult(int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
  * @param startIdx starting index
  * @param endIdx ending index
  */
-static void sequentialLU(DATA_TYPE **A, const int startIdx, const int endIdx) {
+static void sequentialLU(DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
+                         const int startIdx, const int endIdx) {
   // iterate on diagonal pivots
   for (size_t k = startIdx; k <= endIdx; k++) {
 
@@ -135,10 +136,10 @@ static void sequentialLU(DATA_TYPE **A, const int startIdx, const int endIdx) {
  *
  * The decomposition of A22' into L22 and U22 whill be done in next iterations
  */
-static void calculateSchurComplement(DATA_TYPE **A, const int kStart,
-                                     const int dimK, const int rowStartIdx,
-                                     const int rowDim, const int colStartIdx,
-                                     const int colDim) {
+static void calculateSchurComplement(DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
+                                     const int kStart, const int dimK,
+                                     const int rowStartIdx, const int rowDim,
+                                     const int colStartIdx, const int colDim) {
   // Matrix product between L and U matrix on the same row and column of the
   // analyzed block
   for (size_t i = rowStartIdx; i < rowStartIdx + rowDim; i++)
@@ -181,10 +182,10 @@ static void calculateSchurComplement(DATA_TYPE **A, const int kStart,
  * this function is called for every side-block of the pivot one and in-place
  * updating the matrix A
  */
-static void matrixTriangularUpperSubsitutio(DATA_TYPE **A,
-                                            const int columnStart,
-                                            const int columnDim,
-                                            const int startL, const int dimL) {
+static void
+matrixTriangularUpperSubsitutio(DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
+                                const int columnStart, const int columnDim,
+                                const int startL, const int dimL) {
   // iterate on the columns of A to resolve iterativly the TFS
   for (size_t k = columnStart; k < columnStart + columnDim; k++) {
 
@@ -233,9 +234,10 @@ static void matrixTriangularUpperSubsitutio(DATA_TYPE **A,
  * This is done for every column in A10.
  *
  */
-static void matrixTriangularLowerSubsitution(DATA_TYPE **A, const int rowStart,
-                                             const int rowDim, const int startU,
-                                             const int dimU) {
+static void
+matrixTriangularLowerSubsitution(DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
+                                 const int rowStart, const int rowDim,
+                                 const int startU, const int dimU) {
   // iterate on the row of A and resolve the TFS
   for (size_t row = rowStart; row < rowStart + rowDim; row++) {
 
@@ -403,7 +405,7 @@ int main(int argc, char **argv) {
   polybench_prevent_dce(print_array(n, POLYBENCH_ARRAY(A)));
 
   int8_t checkEqual = verifyResult(n, POLYBENCH_ARRAY(A), POLYBENCH_ARRAY(B));
-  fprintf(stderr, "Check Result equality: %d", checkEqual);
+  fprintf(stderr, "Check Result equality: %d\n", checkEqual);
   /* Be clean. */
   POLYBENCH_FREE_ARRAY(A);
   POLYBENCH_FREE_ARRAY(B);
