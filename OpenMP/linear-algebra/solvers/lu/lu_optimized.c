@@ -349,7 +349,7 @@ static void kernelBlockLU(const int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
 
     // compute the TFS on each of the right blocks
     for (size_t i = k + blockSize; i < _PB_N; i += blockSize) {
-      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[i][k])
+      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[k][i])
       {
         int iDim = MIN(_PB_N - i, blockSize);
         matrixTriangularUpperSubsitutio(A, i, iDim, k, kDim);
@@ -358,7 +358,7 @@ static void kernelBlockLU(const int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
 
     // comppute the TFS on each of the below blocks
     for (size_t i = k + blockSize; i < _PB_N; i += blockSize) {
-      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[k][i])
+      #pragma omp task shared(A) firstprivate(i, blockSize, k, kDim) depend(in: A[k][k]) depend(inout: A[i][k])
       {
         int iDim = MIN(_PB_N - i, blockSize);
         matrixTriangularLowerSubsitution(A, i, iDim, k, kDim);
