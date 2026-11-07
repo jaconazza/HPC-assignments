@@ -38,6 +38,10 @@
 
 #define _PB_N POLYBENCH_LOOP_BOUND(N, n)
 
+#ifdef NTHREADS
+#define NTHREADS 4
+#endif
+
 #ifndef DATA_TYPE
 #define DATA_TYPE double
 #define DATA_PRINTF_MODIFIER "%0.2lf "
