@@ -53,12 +53,16 @@ static void print_array(int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n)) {
 
 // verify the result from the sequential and parrallel decomposition
 static int8_t verifyResult(int n, DATA_TYPE POLYBENCH_2D(A, N, N, n, n),
-                           DATA_TYPE POLYBENCH_2D(B, N, N, n, n)) {
-  for (size_t i = 0; i < n; i++)
-    for (size_t j = 0; j < n; j++)
-      if (A[i][j] != B[i][j])
-        return -1;
-  return 1;
+                           DATA_TYPE POLYBENCH_2D(Aref, N, N, n, n)) {
+  double maxErr = 0.0;
+  for (int i = 0; i < n; i++)
+    for (int j = 0; j < n; j++) {
+      double e = fabs((double)A[i][j] - (double)Aref[i][j]);
+      if (e > maxErr)
+        maxErr = e;
+    }
+  fprintf(stderr, "Max error: %g\n", maxErr);
+  return maxErr < 1e-9 ? 1 : -1; // se DATA_TYPE è float, usa 1e-3
 }
 
 // ---- LU Decomposition ----
