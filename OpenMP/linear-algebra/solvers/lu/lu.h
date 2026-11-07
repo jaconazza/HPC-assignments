@@ -38,7 +38,7 @@
 
 #define _PB_N POLYBENCH_LOOP_BOUND(N, n)
 
-#ifdef NTHREADS
+#ifndef NTHREADS
 #define NTHREADS 4
 #endif
 
