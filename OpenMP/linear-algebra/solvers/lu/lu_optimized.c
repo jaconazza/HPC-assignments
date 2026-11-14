@@ -410,7 +410,9 @@ int main(int argc, char **argv) {
   init_array(n, POLYBENCH_ARRAY(A));
   init_array(n, POLYBENCH_ARRAY(B));
 
+#ifdef VERIFY
   kernel_lu(n, POLYBENCH_ARRAY(A));
+#endif
 
   /* Start timer. */
   fprintf(stderr, "start measuring time...\n");
@@ -431,8 +433,11 @@ int main(int argc, char **argv) {
 
   polybench_prevent_dce(print_array(n, POLYBENCH_ARRAY(A)));
 
+#ifdef VERIFY
   int8_t checkEqual = verifyResult(n, POLYBENCH_ARRAY(A), POLYBENCH_ARRAY(B));
   fprintf(stderr, "Check Result equality: %d\n", checkEqual);
+#endif
+
   /* Be clean. */
   POLYBENCH_FREE_ARRAY(A);
   POLYBENCH_FREE_ARRAY(B);
