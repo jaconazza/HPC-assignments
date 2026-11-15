@@ -57,3 +57,9 @@ where:
 
 - **`OpenMP/`**: assignment on the LU decomposition in OpenMP (source code and analysis)
 - **`common/`**: PolyBench, used to measure the execution time and for part of the profiling operations
+
+## Contributors
+
+Nardone Massimiliano
+Nazzaro Jacopo
+Vecchio Ester
