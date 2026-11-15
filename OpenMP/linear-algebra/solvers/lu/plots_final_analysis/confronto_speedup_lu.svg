@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">Confronto degli speed-up LU</title>
+<desc id="desc">Confronto delle mediane dei tempi del kernel per cinque dataset e tre versioni, con 4 thread richiesti. La versione a blocchi usa il blocco con la mediana più bassa per ciascun dataset.</desc>
+<defs>
+<linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" stop-color="#EF4C91"/>
+<stop offset="55%" stop-color="#8B4DCE"/>
+<stop offset="100%" stop-color="#3C56E8"/>
+</linearGradient>
+<linearGradient id="titlePanel" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#111936"/>
+<stop offset="100%" stop-color="#27245F"/>
+</linearGradient>
+</defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="4" y="4" width="1092" height="692" rx="18" fill="none" stroke="url(#brand)" stroke-width="7"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#192344">
+<rect x="28" y="22" width="224" height="30" rx="15" fill="url(#brand)"/>
+<text x="140" y="42" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="1.1" fill="#fff">LU DECOMPOSITION</text>
+<rect x="247" y="20" width="606" height="48" rx="24" fill="url(#titlePanel)"/>
+<text x="550" y="51" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">Confronto degli speed-up LU</text>
+<text x="550" y="99" text-anchor="middle" font-size="14" fill="#56617D">Misure perf · 4 thread richiesti · mediana delle ripetizioni</text>
+<line x1="115" y1="470" x2="985" y2="470" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="475" text-anchor="end" font-size="13" fill="#49546F">0×</text>
+<line x1="115" y1="405" x2="985" y2="405" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="410" text-anchor="end" font-size="13" fill="#49546F">1×</text>
+<line x1="115" y1="340" x2="985" y2="340" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="345" text-anchor="end" font-size="13" fill="#49546F">2×</text>
+<line x1="115" y1="275" x2="985" y2="275" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="280" text-anchor="end" font-size="13" fill="#49546F">3×</text>
+<line x1="115" y1="210" x2="985" y2="210" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="215" text-anchor="end" font-size="13" fill="#49546F">4×</text>
+<line x1="115" y1="145" x2="985" y2="145" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="150" text-anchor="end" font-size="13" fill="#49546F">5×</text>
+<line x1="115" y1="405" x2="985" y2="405" stroke="#A34CCB" stroke-width="2" stroke-dasharray="7 6"/>
+<path d="M 115 145 V 470 H 985" fill="none" stroke="#35405F" stroke-width="1.5"/>
+<text x="28" y="307.5" text-anchor="middle" font-size="14" fill="#35405F" transform="rotate(-90 28 307.5)">Speed-up rispetto a v0</text>
+<text x="115" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">MINI</text>
+<text x="115" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=32</text>
+<text x="115" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<text x="332.5" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">SMALL</text>
+<text x="332.5" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=128</text>
+<text x="332.5" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 32</text>
+<text x="550" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">STANDARD</text>
+<text x="550" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=1024</text>
+<text x="550" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 64</text>
+<text x="767.5" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">LARGE</text>
+<text x="767.5" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=2000</text>
+<text x="767.5" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<text x="985" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">EXTRALARGE</text>
+<text x="985" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=4000</text>
+<text x="985" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<polyline points="115,463.00347222222223 332.5,341.5441176470588 550,349.94540699799404 767.5,365.0711232879812 985,366.7308970509893" fill="none" stroke="#16AFCB" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="463.00347222222223" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, MINI: 0.107639</title></circle>
+<circle cx="332.5" cy="341.5441176470588" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, SMALL: 1.97624</title></circle>
+<circle cx="550" cy="349.94540699799404" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, STANDARD: 1.84699</title></circle>
+<circle cx="767.5" cy="365.0711232879812" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, LARGE: 1.61429</title></circle>
+<circle cx="985" cy="366.7308970509893" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, EXTRALARGE: 1.58876</title></circle>
+<polyline points="115,462.95454545454544 332.5,331.3492063492063 550,348.33325218026414 767.5,363.49299471008845 985,365.94993033347464" fill="none" stroke="#E94F85" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="462.95454545454544" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), MINI: 0.108392</title></circle>
+<circle cx="332.5" cy="331.3492063492063" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), SMALL: 2.13309</title></circle>
+<circle cx="550" cy="348.33325218026414" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), STANDARD: 1.87180</title></circle>
+<circle cx="767.5" cy="363.49299471008845" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), LARGE: 1.63857</title></circle>
+<circle cx="985" cy="365.94993033347464" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), EXTRALARGE: 1.60077</title></circle>
+<polyline points="115,448.7894736842105 332.5,344.2469545957918 550,264.3956959480904 767.5,182.41245039889606 985,167.75150325461078" fill="none" stroke="#48A967" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="448.7894736842105" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, MINI: 0.326316 (blocco 128)</title></circle>
+<circle cx="332.5" cy="344.2469545957918" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, SMALL: 1.93466 (blocco 32)</title></circle>
+<circle cx="550" cy="264.3956959480904" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, STANDARD: 3.16314 (blocco 64)</title></circle>
+<circle cx="767.5" cy="182.41245039889606" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, LARGE: 4.42442 (blocco 128)</title></circle>
+<circle cx="985" cy="167.75150325461078" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, EXTRALARGE: 4.64998 (blocco 128)</title></circle>
+<rect x="185" y="568" width="730" height="46" rx="23" fill="#F6F7FB" stroke="#E2E5EF"/>
+<line x1="215" y1="591" x2="249" y2="591" stroke="#16AFCB" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="232" cy="591" r="5" fill="#16AFCB" stroke="#fff" stroke-width="1.5"/>
+<text x="259" y="596" font-size="13" font-weight="bold" fill="#303B5B">v2_simd</text>
+<line x1="460" y1="591" x2="494" y2="591" stroke="#E94F85" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="477" cy="591" r="5" fill="#E94F85" stroke="#fff" stroke-width="1.5"/>
+<text x="504" y="596" font-size="13" font-weight="bold" fill="#303B5B">v3 - schedule(static)</text>
+<line x1="705" y1="591" x2="739" y2="591" stroke="#48A967" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="722" cy="591" r="5" fill="#48A967" stroke="#fff" stroke-width="1.5"/>
+<text x="749" y="596" font-size="13" font-weight="bold" fill="#303B5B">Versione a blocchi</text>
+<text x="550" y="642" text-anchor="middle" font-size="12" fill="#68728A">Blocchi scelti sugli stessi dati mostrati; misure provenienti da due raccolte distinte.</text>
+<text x="550" y="662" text-anchor="middle" font-size="12" fill="#68728A">Speed-up = mediana v0 / mediana versione; la linea tratteggiata indica 1×.</text>
+</g></svg>

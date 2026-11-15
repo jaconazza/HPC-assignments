@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
+<title id="title">Confronto dei tempi del kernel LU</title>
+<desc id="desc">Confronto delle mediane dei tempi del kernel per cinque dataset e tre versioni, con 4 thread richiesti. La versione a blocchi usa il blocco con la mediana più bassa per ciascun dataset.</desc>
+<defs>
+<linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" stop-color="#EF4C91"/>
+<stop offset="55%" stop-color="#8B4DCE"/>
+<stop offset="100%" stop-color="#3C56E8"/>
+</linearGradient>
+<linearGradient id="titlePanel" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" stop-color="#111936"/>
+<stop offset="100%" stop-color="#27245F"/>
+</linearGradient>
+</defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="4" y="4" width="1092" height="692" rx="18" fill="none" stroke="url(#brand)" stroke-width="7"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#192344">
+<rect x="28" y="22" width="224" height="30" rx="15" fill="url(#brand)"/>
+<text x="140" y="42" text-anchor="middle" font-size="13" font-weight="bold" letter-spacing="1.1" fill="#fff">LU DECOMPOSITION</text>
+<rect x="247" y="20" width="606" height="48" rx="24" fill="url(#titlePanel)"/>
+<text x="550" y="51" text-anchor="middle" font-size="23" font-weight="bold" fill="#fff">Confronto dei tempi del kernel LU</text>
+<text x="550" y="99" text-anchor="middle" font-size="14" fill="#56617D">Misure perf · 4 thread richiesti · mediana delle ripetizioni</text>
+<line x1="115" y1="470" x2="985" y2="470" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="475" text-anchor="end" font-size="13" fill="#49546F">0.00001</text>
+<line x1="115" y1="423.57142857142856" x2="985" y2="423.57142857142856" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="428.57142857142856" text-anchor="end" font-size="13" fill="#49546F">0.0001</text>
+<line x1="115" y1="377.14285714285717" x2="985" y2="377.14285714285717" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="382.14285714285717" text-anchor="end" font-size="13" fill="#49546F">0.001</text>
+<line x1="115" y1="330.7142857142857" x2="985" y2="330.7142857142857" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="335.7142857142857" text-anchor="end" font-size="13" fill="#49546F">0.01</text>
+<line x1="115" y1="284.28571428571433" x2="985" y2="284.28571428571433" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="289.28571428571433" text-anchor="end" font-size="13" fill="#49546F">0.1</text>
+<line x1="115" y1="237.85714285714286" x2="985" y2="237.85714285714286" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="242.85714285714286" text-anchor="end" font-size="13" fill="#49546F">1</text>
+<line x1="115" y1="191.42857142857144" x2="985" y2="191.42857142857144" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="196.42857142857144" text-anchor="end" font-size="13" fill="#49546F">10</text>
+<line x1="115" y1="145" x2="985" y2="145" stroke="#DDE2EC" stroke-width="1"/>
+<text x="103" y="150" text-anchor="end" font-size="13" fill="#49546F">100</text>
+<path d="M 115 145 V 470 H 985" fill="none" stroke="#35405F" stroke-width="1.5"/>
+<text x="28" y="307.5" text-anchor="middle" font-size="14" fill="#35405F" transform="rotate(-90 28 307.5)">Tempo mediano del kernel (s, scala logaritmica)</text>
+<text x="115" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">MINI</text>
+<text x="115" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=32</text>
+<text x="115" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<text x="332.5" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">SMALL</text>
+<text x="332.5" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=128</text>
+<text x="332.5" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 32</text>
+<text x="550" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">STANDARD</text>
+<text x="550" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=1024</text>
+<text x="550" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 64</text>
+<text x="767.5" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">LARGE</text>
+<text x="767.5" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=2000</text>
+<text x="767.5" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<text x="985" y="494" text-anchor="middle" font-size="13" font-weight="bold" fill="#202B4C">EXTRALARGE</text>
+<text x="985" y="513" text-anchor="middle" font-size="12" fill="#49546F">N=4000</text>
+<text x="985" y="531" text-anchor="middle" font-size="12" fill="#68728A">blocco 128</text>
+<polyline points="115,402.24249163974997 332.5,379.6290019815359 550,248.74487726296942 767.5,207.10394711282783 985,164.60549419887627" fill="none" stroke="#16AFCB" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="402.24249163974997" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, MINI: 0.000288000</title></circle>
+<circle cx="332.5" cy="379.6290019815359" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, SMALL: 0.000884000</title></circle>
+<circle cx="550" cy="248.74487726296942" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, STANDARD: 0.582767</title></circle>
+<circle cx="767.5" cy="207.10394711282783" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, LARGE: 4.59596</title></circle>
+<circle cx="985" cy="164.60549419887627" r="6" fill="#16AFCB" stroke="#fff" stroke-width="2"><title>v2_simd, EXTRALARGE: 37.8205</title></circle>
+<polyline points="115,402.383005604723 332.5,381.1689617039806 550,249.01384353176488 767.5,207.40495050196796 985,164.7574071292019" fill="none" stroke="#E94F85" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="402.383005604723" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), MINI: 0.000286000</title></circle>
+<circle cx="332.5" cy="381.1689617039806" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), SMALL: 0.000819000</title></circle>
+<circle cx="550" cy="249.01384353176488" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), STANDARD: 0.575045</title></circle>
+<circle cx="767.5" cy="207.40495050196796" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), LARGE: 4.52786</title></circle>
+<circle cx="985" cy="164.7574071292019" r="6" fill="#E94F85" stroke="#fff" stroke-width="2"><title>v3 - schedule(static), EXTRALARGE: 37.5367</title></circle>
+<polyline points="115,424.60568975444636 332.5,379.2002115925872 550,259.59307185646037 767.5,227.4338604613439 985,186.25948950345094" fill="none" stroke="#48A967" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="115" cy="424.60568975444636" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, MINI: 0.0000950000 (blocco 128)</title></circle>
+<circle cx="332.5" cy="379.2002115925872" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, SMALL: 0.000903000 (blocco 32)</title></circle>
+<circle cx="550" cy="259.59307185646037" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, STANDARD: 0.340284 (blocco 64)</title></circle>
+<circle cx="767.5" cy="227.4338604613439" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, LARGE: 1.67688 (blocco 128)</title></circle>
+<circle cx="985" cy="186.25948950345094" r="6" fill="#48A967" stroke="#fff" stroke-width="2"><title>Versione a blocchi, EXTRALARGE: 12.9221 (blocco 128)</title></circle>
+<rect x="185" y="568" width="730" height="46" rx="23" fill="#F6F7FB" stroke="#E2E5EF"/>
+<line x1="215" y1="591" x2="249" y2="591" stroke="#16AFCB" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="232" cy="591" r="5" fill="#16AFCB" stroke="#fff" stroke-width="1.5"/>
+<text x="259" y="596" font-size="13" font-weight="bold" fill="#303B5B">v2_simd</text>
+<line x1="460" y1="591" x2="494" y2="591" stroke="#E94F85" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="477" cy="591" r="5" fill="#E94F85" stroke="#fff" stroke-width="1.5"/>
+<text x="504" y="596" font-size="13" font-weight="bold" fill="#303B5B">v3 - schedule(static)</text>
+<line x1="705" y1="591" x2="739" y2="591" stroke="#48A967" stroke-width="3.5" stroke-linecap="round"/>
+<circle cx="722" cy="591" r="5" fill="#48A967" stroke="#fff" stroke-width="1.5"/>
+<text x="749" y="596" font-size="13" font-weight="bold" fill="#303B5B">Versione a blocchi</text>
+<text x="550" y="642" text-anchor="middle" font-size="12" fill="#68728A">Blocchi scelti sugli stessi dati mostrati; misure provenienti da due raccolte distinte.</text>
+<text x="550" y="662" text-anchor="middle" font-size="12" fill="#68728A">Tempo del kernel in secondi, scala logaritmica.</text>
+</g></svg>
