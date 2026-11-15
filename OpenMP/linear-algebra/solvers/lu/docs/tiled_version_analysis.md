@@ -28,6 +28,7 @@ $$A_{kk} = L_{kk}\,U_{kk}$$
 Element-wise, for each pivot $p = 1, \dots, B$ and each row $i > p$:
 
 $$l_{ip} = \frac{a_{ip}}{a_{pp}}, \qquad a_{ij} \leftarrow a_{ij} - l_{ip}\,a_{pj} \quad (j > p)$$
+
 2. **Calculate the Triangular Forward substitution** :
 Each block on the right or below the pivot, can be seen as a set of **triangular linear systems** that can be directly resolve using `triangular forward substitution method` where the variable vector to resolve is, iteratively, every `columns` (for the right-side tiles) or `row` (for the down-side tiles) of each block.
 This second step is implemented by `matrixTriangularUpperSubsitution` and `matrixTriangularLowerSubsitution` which compute the TFS on the right (upper) and lower tiles.
@@ -38,6 +39,7 @@ $$L_{kk}\,U_{kj} = A_{kj} \quad\Longrightarrow\quad U_{kj} = L_{kk}^{-1}\,A_{kj}
 Down-side tiles ($i > k$): solve an upper triangular system for each row of the tile.
 
 $$L_{ik}\,U_{kk} = A_{ik} \quad\Longrightarrow\quad L_{ik} = A_{ik}\,U_{kk}^{-1}$$
+
 3. **Calculate the Schur complements on the remaining sub-matrix**:
 Like the classical Gaussian method, this step takes the result from the triangular systems (previously executed) and update the remaining `tiles` by subtracting to each original `block` the `GEMM` of the **upper and lower blocks on the same row and columns**.
 As a result, it is obtained a **new sub-matrix** on which the entire process can be **recursively called until convergence**.
@@ -94,11 +96,23 @@ It is important to underline that, after reaching a speedup of `4.5x` on the `la
 Considering an original `NxN` matrix, the cost of the entire process sequentially is `(2/3)*N^3`
 If we subdivide the matrix in tile of `BxB` we obtain the following costs at each iteration:
 
-- **Sequential LU**: $$\left(\tfrac{2}{3}B^3\right)\cdot\frac{N}{B} = \tfrac{2}{3}\,N B^2$$ where `N/B` is the number of tile.
+- **Sequential LU**:
+   
+  $$\left(\tfrac{2}{3}B^3\right)\cdot\frac{N}{B} = \tfrac{2}{3}\,N B^2$$ 
   
-- **TFS**: $$B^3 \cdot 2 \cdot \frac{N}{B} = 2\,N B^2$$ tiles for every row / column.
+  where `N/B` is the number of tile.
+  
+- **TFS**: 
+  
+  $$B^3 \cdot 2 \cdot \frac{N}{B} = 2\,N B^2$$ 
+  
+  tiles for every row / column.
 
-- **Schur complement**: $$2 \cdot B^3 \cdot \frac{N}{B} = 2\,N B^2$$ to complete the entire calculations.
+- **Schur complement**: 
+  
+  $$2 \cdot B^3 \cdot \frac{N}{B} = 2\,N B^2$$ 
+  
+  to complete the entire calculations.
 
 Considering that the `TFS` and `GEMM` can be parallelized, with (only in theory) optimal infinite thread the cost is reduced to the only `sequential LU` for every pivot block, gaining a $$N^2/B^2$$ of **maximum speedup**.
 Doing the maths:
