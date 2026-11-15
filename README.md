@@ -12,6 +12,10 @@ This GitHub repo contains the assignments of **Team 6** for the **HPC course at 
 │   │       └── lu
 │   │           ├── Makefile
 │   │           ├── README.md
+│   │           ├── benchmarks
+│   │           │   ├── lu_v2_steps.c
+│   │           │   ├── perf_valgrind.sh
+│   │           │   └── tiled_benchmark.sh
 │   │           ├── docs
 │   │           │   ├── direct_optimization_analysis.md
 │   │           │   └── tiled_version_analysis.md
