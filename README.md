@@ -60,6 +60,6 @@ where:
 
 ## Contributors
 
-Nardone Massimiliano
-Nazzaro Jacopo
-Vecchio Ester
+- Nardone Massimiliano
+- Nazzaro Jacopo
+- Vecchio Ester
