@@ -1,0 +1,50 @@
+== Data e host ==
+mar 17 nov 2026, 17.49.40, CET
+nano1
+Linux 4.9.337-tegra
+
+== CPU ==
+Architecture:        aarch64
+CPU(s):              4
+Thread(s) per core:  1
+Core(s) per socket:  4
+Socket(s):           1
+Model name:          Cortex-A57
+CPU max MHz:         1479,0000
+CPU min MHz:         102,0000
+Istruzioni vettoriali presenti:
+
+
+== Core fisici contro thread logici (stessa colonna CORE = thread SMT sullo stesso core) ==
+CPU CORE SOCKET ONLINE
+0   0    0      yes
+1   1    0      yes
+2   2    0      yes
+3   3    0      yes
+Core fisici: 4   Thread logici: 4   (CPU disponibili al processo: 4)
+
+== Cache ==
+L1d cache:           32K
+L1i cache:           48K
+L2 cache:            2048K
+
+== Frequenza e turbo ==
+governor: schedutil
+
+== Limiti e carico (macchina condivisa?) ==
+CPU consentite a questa shell: 0-3
+ 17:49:40 up 29 days, 16:59,  1 user,  load average: 0,14, 0,30, 0,15
+
+== Compilatore ==
+gcc (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 7.5.0
+Flag usati dal Makefile (make -n, senza eseguire):
+gcc -I../../../utilities -MM lu.c ../../../utilities/polybench.c > Makefile.dep
+gcc -O2 -g -fopenmp -I.  -I../../../utilities lu.c ../../../utilities/polybench.c -o lu_acc -lm 
+
+== Thread OpenMP effettivi (programma di prova) ==
+OMP_NUM_THREADS=non impostato  OMP_PROC_BIND=non impostato  OMP_PLACES=non impostato
+omp_get_max_threads=4  omp_get_num_procs=4
+  thread 1 su CPU 1 (team di 4)
+  thread 0 su CPU 3 (team di 4)
+  thread 3 su CPU 2 (team di 4)
+  thread 2 su CPU 0 (team di 4)

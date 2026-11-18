@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-labelledby="title desc">
 <title id="title">Confronto degli speed-up LU</title>
-<desc id="desc">Confronto delle mediane dei tempi del kernel per cinque dataset e tre versioni, con 4 thread richiesti. La versione a blocchi usa il blocco con la mediana più bassa per ciascun dataset.</desc>
+<desc id="desc">Confronto delle mediane dei tempi del kernel per cinque dataset e 3 versioni, con 4 thread richiesti. La versione a blocchi usa il blocco con la mediana più bassa per ciascun dataset.</desc>
 <defs>
 <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="0%">
 <stop offset="0%" stop-color="#EF4C91"/>

@@ -5,7 +5,7 @@
 The program implements LU factorization without pivoting and compares a
 serial version with several OpenMP variants. This report describes how the
 kernel works, the incremental optimizations, and the results in
-[`lu_kernel_results.csv`](./lu_kernel_results.csv). The main measurements
+[`lu_kernel_results.csv`](../results/lu_kernel_results.csv). The main measurements
 are **kernel** execution times, not total process times.
 
 For `N=4000`, the median of the original serial version is **60.087601 s**,
@@ -24,7 +24,7 @@ non-singular matrix.
 ## 2. Program structure
 
 The program operates on a square `N × N` matrix `A`, normally of type
-`double`. Dataset sizes are defined in [`lu.h`](./lu.h).
+`double`. Dataset sizes are defined in [`lu.h`](../lu.h).
 
 | Phase | What happens |
 |---|---|
@@ -36,7 +36,7 @@ The program operates on a square `N × N` matrix `A`, normally of type
 
 ### 2.1 What `kernel_lu` does
 
-The serial code is in [`lu.c`](./lu.c). The idea is to process one pivot `k`
+The serial code is in [`lu.c`](../lu.c). The idea is to process one pivot `k`
 at a time, normalize the part of the pivot row to its right, and update the
 submatrix below it:
 
@@ -66,7 +66,7 @@ submatrix shrinks as `k` increases.
 
 ## 3. Implemented optimizations
 
-The intermediate versions are implemented in [`lu_v2_steps.c`](./lu_v2_steps.c),
+The intermediate versions are implemented in [`lu_v2_steps.c`](../benchmarks/lu_v2_steps.c),
 by selecting `LU_STEP` from 1 to 5. Each step retains the previous ones.
 
 | Order | Name in CSV | Change | Goal and limitation |
@@ -88,7 +88,7 @@ rows 1, 5, 9, … to the second. Block assignment can improve locality, while
 cyclic assignment can help with irregular workloads. Here, for a fixed
 pivot, the updated rows have loops of the same length, so a load-balancing
 benefit is not guaranteed. The sources for the two versions are
-[`lu_v3.c`](./lu_v3.c) and [`lu_v4.c`](./lu_v4.c).
+[`lu_v3.c`](../lu_v3.c) and [`lu_v4.c`](../lu_v4.c).
 
 ## 4. Evaluation methodology
 
@@ -102,7 +102,7 @@ benefit is not guaranteed. The sources for the two versions are
 | Process time | `wall_seconds` covers the entire invocation and is not used for the speedups reported here. |
 | Counters | `perf` counts the entire process, including the OpenMP runtime; Cachegrind simulates events for the entire process and alters execution. Its times are not native execution times. |
 
-The current script [`perf_valgrind.sh`](./perf_valgrind.sh) enables the
+The current script [`perf_valgrind.sh`](../benchmarks/perf_valgrind.sh) enables the
 PolyBench timer and disables PolyBench's preliminary cache flush. The timer
 uses `gettimeofday` and prints six decimal places: it is not a monotonic
 clock, and its resolution limits interpretation, especially for small
@@ -161,7 +161,7 @@ milliseconds: small changes and timer precision have a large impact.
 
 Each value is calculated as **original time / version time**.
 
-![Speedup by size relative to the original](./grafici_relazione_kernel/speedup_per_dataset.svg)
+![Speedup by size relative to the original](Plots/speedup_per_dataset.svg)
 
 For `N=4000`, moving from the original to OpenMP reduces the median from
 60.087601 to 38.538919 s. SIMD is faster than the pragma-only version in the
@@ -172,7 +172,7 @@ contribution of any single optimization.
 
 ### 5.3 Successive steps and variability at N=4000
 
-![Median times for the successive steps, N=4000](./grafici_relazione_kernel/tempi_passaggi_n4000.svg)
+![Median times for the successive steps, N=4000](Plots/tempi_passaggi_n4000.svg)
 
 | Version | Median kernel (s) | Min–max (s) | Speedup over original |
 |---|---:|---:|---:|
@@ -206,7 +206,7 @@ value indicates a lower median for `static,1`.
 | 2000 | 4.527864 [4.524003–4.533600] | 4.522652 [4.505185–4.523440] | −0.12% |
 | 4000 | 37.536679 [37.529436–37.556152] | 37.481836 [37.480024–37.490305] | −0.15% |
 
-![Percentage difference between static,1 and static by dataset](./grafici_relazione_kernel/static_vs_static1_dataset.svg)
+![Percentage difference between static,1 and static by dataset](Plots/static_vs_static1_dataset.svg)
 
 The largest observed difference is at `N=128`, but it concerns very short
 times and does not show that the same trend applies to other inputs. For
@@ -224,7 +224,7 @@ ratios. The instruction and cycle columns are separate medians, expressed in
 billions. These counters cover the **entire process**, not just the kernel,
 and also include thread and runtime activity.
 
-![IPC for the various versions, N=4000](./grafici_relazione_kernel/ipc_passaggi_n4000.svg)
+![IPC for the various versions, N=4000](Plots/ipc_passaggi_n4000.svg)
 
 | Version, N=4000 | Median instructions (billions) | Median cycles (billions) | Median IPC | Median kernel time (s) |
 |---|---:|---:|---:|---:|
@@ -254,7 +254,153 @@ misses are about 4.635 billion for `static` and 4.700 billion for
 `static,1`: this is not enough to explain a time difference or, by itself,
 determine which scheduling policy has better locality.
 
-## 8. Correctness and final considerations
+## 8. Is the kernel memory-bound?
+
+### 8.1 Why this test
+
+The previous sections show that the micro-optimizations after OpenMP change
+the time very little despite fewer instructions (−18.89% between SIMD and
+hoisting), and that the 4-thread speedup stays well below 4×. This is typical
+of a **memory-limited** kernel: if time is dominated by data transfer,
+reducing instructions or adding threads does not shorten it proportionally.
+To check this, a targeted test was run on `v0` (original serial) and `v3`
+(OpenMP + SIMD, 4 threads) with `N=32, 128, 1024, 2000`, chosen because they
+change the cache level holding the matrix (`8·N²` bytes, with 32 KB L1d and
+2 MB L2 on the test machine's Cortex-A57, see [`sys-info.txt`](../results/sys-info.txt)):
+
+| N | Matrix | Resides in |
+|---:|---:|---|
+| 32 | 8 KB | L1 |
+| 128 | 128 KB | L2 |
+| 1024 | 8 MB | beyond L2 (RAM) |
+| 2000 | ≈ 32 MB | beyond L2 (RAM) |
+
+Test platform (from [`sys-info.txt`](../results/sys-info.txt), board `nano1`):
+
+| Parameter | Value |
+|---|---|
+| CPU | ARM Cortex-A57, aarch64, 4 physical cores, 1 thread per core |
+| Frequency | 102 MHz (min) – 1479 MHz (max), `schedutil` governor |
+| Caches | L1d 32 KB, L1i 48 KB, L2 2 MB (shared by the 4 cores) |
+| OS / compiler | Linux 4.9.337-tegra, gcc 7.5.0 (Ubuntu 18.04), `-O2 -g -fopenmp` |
+| Load at start | load average 0.14 (machine nearly idle) |
+| OpenMP threads | 4 threads on the 4 cores (CPUs 0–3) |
+
+With 4 threads the 2 MB L2 is shared: already at `N=128` (128 KB) the matrix
+fits in L2 but no longer, together with the other rows, in the per-core L1d.
+
+If the kernel is memory-bound, GFLOPS/s should **drop** when the matrix
+leaves the cache; a compute-bound kernel would stay roughly constant. The
+script is `perf_v0_v3_topdown.sh`; data are in `lu_memory-bound.csv` (5
+repetitions per point, medians below). The FLOP count is `2/3·N³` for both
+versions.
+
+### 8.2 Data
+
+| N | Version | Threads | Median kernel time (s) | Median GFLOPS/s | Speedup v3/v0 |
+|---:|---|---:|---:|---:|---:|
+| 32 | v0 | 1 | 0.000031 | 0.705 | |
+| 32 | v3 | 4 | 0.000285 | 0.077 | 0.11× |
+| 128 | v0 | 1 | 0.001737 | 0.803 | |
+| 128 | v3 | 4 | 0.000832 | 1.680 | 2.09× |
+| 1024 | v0 | 1 | 1.067871 | 0.670 | |
+| 1024 | v3 | 4 | 0.568598 | 1.259 | 1.88× |
+| 2000 | v0 | 1 | 7.425220 | 0.718 | |
+| 2000 | v3 | 4 | 4.549858 | 1.172 | 1.63× |
+
+Hardware counters are **not available**: in the CSV the `cycles`,
+`instructions`, `cache_*`, `stalled_*`, `backend_bound_pct` and
+`memory_bound_pct` columns are empty (`l1_metric` and `l2_metric` are `n/a`).
+The board's Linux 4.9 kernel and the Cortex-A57 do not expose the top-down
+metrics or the requested events to `perf`. **Backend bound and memory bound
+are therefore not measured directly**; the conclusion below is inferred from
+GFLOPS/s.
+
+### 8.3 Measured memory bandwidth (STREAM)
+
+To replace the estimates with real values, a STREAM-style benchmark
+(`stream_bw.c`, run with `run_stream.sh`; results in `stream_results.txt`)
+was run on the same
+board: 160 MB arrays (far beyond L2), `OMP_PROC_BIND=true`, best time over 19
+iterations. The `LU-update` kernel repeats the inner-update operation
+`a[j] -= s*b[j]`.
+
+| Kernel | 1 thread (GB/s) | 4 threads (GB/s) | Scaling 1→4 |
+|---|---:|---:|---:|
+| Copy | 7.06 | 11.08 | 1.57× |
+| Scale | 7.06 | 10.96 | 1.55× |
+| Add | 6.85 | 9.07 | 1.32× |
+| Triad | 6.86 | 9.08 | 1.32× |
+| LU-update | 6.38 | 8.39 | 1.32× |
+
+Sustainable bandwidth is therefore **≈7 GB/s with one thread and ≈9–11 GB/s
+with four**, versus a theoretical LPDDR4 peak of 25.6 GB/s (a specification
+value, not measured): the attainable bandwidth is about 40% of peak, and
+four threads gain only 1.3–1.6×.
+
+In the LU update, row `A[k][*]` stays in L1 (16 KB at `N=2000`), so memory
+traffic is `A[i][j]` read and rewritten: 16 bytes per 2 FLOP, i.e. **8
+B/FLOP**. This is the same pattern as the `Copy` kernel, which therefore
+serves as reference: ceiling = bandwidth / 8, i.e. **0.88 GFLOPS/s with 1
+thread** (7.06 GB/s) and **1.38 GFLOPS/s with 4 threads** (11.08 GB/s).
+
+| N | Version | Measured GFLOPS/s | Implied bandwidth (×8 B/FLOP) | STREAM ceiling (Copy) | % of ceiling |
+|---:|---|---:|---:|---:|---:|
+| 1024 | v0 | 0.670 | 5.36 GB/s | 0.88 | 76% |
+| 2000 | v0 | 0.718 | 5.75 GB/s | 0.88 | 81% |
+| 1024 | v3 | 1.259 | 10.07 GB/s | 1.38 | 91% |
+| 2000 | v3 | 1.172 | 9.38 GB/s | 1.38 | 85% |
+
+### 8.4 Considerations
+
+1. **`v0` is mainly core-limited, but not far from the ceiling.** Serial
+   GFLOPS/s are nearly constant (0.67–0.80) across two orders of magnitude in
+   N and across cache levels: at `N=128`, with the matrix in L2, speed equals
+   that at `N=2000` in RAM. This indicates bandwidth is not the (only)
+   limiting factor. However, for `N≥1024` `v0` already uses 76–81% of the
+   single-thread bandwidth, so there is little headroom left without
+   reducing traffic.
+2. **`v3` loses efficiency when the matrix leaves L2.** From `N=128` to
+   `N=2000` it falls from 1.68 to 1.17 GFLOPS/s (about −30%) while `v0` stays
+   flat; the speedup drops from 2.09× to 1.63× on 4 cores.
+3. **`v3` runs at 85–91% of the measured bandwidth ceiling.** With four
+   threads sustainable bandwidth grows only 1.3–1.6× versus one thread, and
+   the speedup of `v3` over `v0` (1.63–1.88×) is of the same order: the extra
+   threads find memory already nearly saturated. The implied 9.4–10.1 GB/s
+   compares with 11.1 GB/s (Copy) and 8.4 GB/s (`LU-update`, which counts 3
+   streams and so overstates the real traffic). The remaining margin (9–15%)
+   is compatible with OpenMP overhead (one barrier per `k`) and with the
+   late steps, where the shrinking submatrix partly fits in L2.
+4. **`N=32` and `N=128`** say nothing about bandwidth: the matrix fits in
+   cache and at `N=32` the time (≈30 µs) is dominated by OpenMP overhead
+   (barriers at each step `k`), making `v3` 9× slower than `v0`.
+
+### 8.5 Conclusion
+
+With the measured bandwidth, `v3` for `N≥1024` is **memory-bound**: it
+reaches 85–91% of the 4-thread STREAM ceiling (≈11 GB/s, about 43% of the
+25.6 GB/s theoretical peak), the ceiling grows only 1.57× from 1 to 4
+threads, and GFLOPS/s drop when the matrix leaves L2. Further instruction-
+level optimizations (SIMD, hoisting, `restrict`) therefore cannot give
+significant gains, consistent with sections 5–7. `v0` is instead mostly
+core-limited (same performance inside and outside the cache) but already
+sits at 76–81% of single-thread bandwidth. To go further, **memory traffic
+must be reduced**, e.g. with a blocked (tiled) LU that increases cache reuse
+and thus arithmetic intensity (0.125 FLOP/byte in the current
+implementation).
+
+**Limitations.** Backend bound and memory bound are not measured with
+hardware counters (unavailable on this platform). The 8 B/FLOP model assumes
+`A[k][*]` stays in L1 and that traffic is only `A[i][j]` read and written;
+STREAM bandwidth is a sustainable ceiling, not an absolute maximum, and the
+comparison uses medians of the LU test against best STREAM times. The
+`schedutil` governor varies frequency (102–1479 MHz) and the effective
+frequency during the runs is not recorded: it may affect GFLOPS/s, but less
+so memory bandwidth, which depends mainly on the DRAM controller.
+[`sys-info.txt`](../results/sys-info.txt) does not list the processor's vector (NEON) instructions, so
+the actual vectorization of `v3` remains unverified.
+
+## 9. Correctness and final considerations
 
 The initialized matrix is the outer product of the vectors `i+1` and `j+1`,
 scaled by `1/N`: for `N>1`, it has rank one and is **singular**. Without
