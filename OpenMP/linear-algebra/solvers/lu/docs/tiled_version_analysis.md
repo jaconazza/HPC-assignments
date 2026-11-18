@@ -66,6 +66,10 @@ We can evidence the advantages of tiled parallel version by looking at the follo
 
 Mean execution time in milliseconds. Sequential uses 1 thread, tiled versions use 4 threads.
 
+![Execution time comparison between serial and tiled version on different datasets on different blocksize](Plots/tiled_time.png)
+![Execution time delta between serial and tiled version on different datasets using 32x32 blocks (log scale)](Plots/tiled_serial_comparison.png)
+![Speedup on different datasets](Plots/tiled_speedup.png)
+
 `Mean execution time in seconds` comparison between **tiled** version and **sequential** one on different datasets and blocksize.
 
 | Dataset | Sequential | 8x8 | 16x16 | 32x32 | 64x64 | 128x128 |
@@ -121,6 +125,8 @@ $$S_{\max} = \frac{T_1}{T_\infty} = \frac{\tfrac{2}{3}N^3}{\tfrac{2}{3}N B^2} = 
 ### 2.2 Cache Analysis
 
 Cache miss rate = `cache-misses / cache-references` (perf).
+
+![Cache miss rate comparison on different datasets and blocksize](Plots/tiled_cache.png)
 
 On `MINI Dataset`:
 
